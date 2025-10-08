@@ -1,22 +1,40 @@
 const Task = require("../models/task.model");
-
+const paginationHelper= require("../../../helpers/pagination");
 // [GET] /api/v1/tasks
 module.exports.index = async (req, res) => {
-    const find= {
+    const find = {
         deleted: false,
     }
-    if(req.query.status){
-        const status= req.query.status;
-        find.status=status;
+    // lọc theo trang thái
+    if (req.query.status) {
+        const status = req.query.status;
+        find.status = status;
     }
     //Sort
-    const sort={};
-    if(req.query.sortKey && req.query.sortValue){
-        sort[req.query.sortKey]= req.query.sortValue;
+    const sort = {};
+    if (req.query.sortKey && req.query.sortValue) {
+        sort[req.query.sortKey] = req.query.sortValue;
     }
     //end sort
 
-    const tasks = await Task.find(find).sort(sort);
+
+    // phân trang
+    // Pagination
+    let initPagination = {
+        currentPage: 1,
+        limitItems: 3,
+    };
+
+    const countTasks = await Task.countDocuments(find);
+    const objectPagination = paginationHelper(
+        initPagination,
+        req.query,
+        countTasks
+    );
+    // End Pagination
+
+    // end phân trang
+    const tasks = await Task.find(find).sort(sort).limit(objectPagination.limitItems).skip(objectPagination.skip);
     res.json(tasks);
 }
 
