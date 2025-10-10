@@ -60,7 +60,7 @@ module.exports.detail = async (req, res) => {
         res.json("Không tìm thấy");
     }
 }
-//chỉnh sửa 1 sản phẩm
+//chỉnh sửa 1 công việc
 //  [PATCH] api/v1/tasks/change-status/:id
 
 module.exports.changeStatus = async (req, res) => {
@@ -89,7 +89,7 @@ module.exports.changeStatus = async (req, res) => {
 }
 
 // [PATCH] /api/v1/tasks/change-multi 
-// chỉnh sửa nhiều sản phẩm
+// chỉnh sửa nhiều công việc
 module.exports.changeMulti = async (req, res) => {
     try {
         const { ids, key, value } = req.body;
@@ -122,5 +122,30 @@ module.exports.changeMulti = async (req, res) => {
             code: 400,
             message: "Không tồn tại"
         })
+    }
+}
+
+// [POST]  /api/v1/tasks/create
+// tạo mới công việc
+
+module.exports.create= async(req, res) =>{
+    try {
+        // validate nữa
+        const record= new Task(req.body);
+        const data = await record.save();
+        res.json(
+            {
+                code: 200,
+                message: "Tạo thành công",
+                data: data
+            }
+        )
+    } catch (error) {
+        res.json(
+            {
+                code: 400,
+                message: "Lỗi!!!"
+            }
+        )
     }
 }
