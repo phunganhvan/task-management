@@ -46,7 +46,7 @@ module.exports.index = async (req, res) => {
     const tasks = await Task.find(find).sort(sort).limit(objectPagination.limitItems).skip(objectPagination.skip);
     res.json(tasks);
 }
-
+// chi tiết sản phẩm
 // [GET] /api/v1/tasks/detail/:id
 module.exports.detail = async (req, res) => {
     try {
@@ -60,13 +60,13 @@ module.exports.detail = async (req, res) => {
         res.json("Không tìm thấy");
     }
 }
-
+//chỉnh sửa 1 sản phẩm
 //  [PATCH] api/v1/tasks/change-status/:id
 
 module.exports.changeStatus = async (req, res) => {
     try {
         const id = req.params.id;
-        const status= req.body.status;
+        const status = req.body.status;
         await Task.updateOne(
             {
                 _id: id,
@@ -80,10 +80,47 @@ module.exports.changeStatus = async (req, res) => {
             message: "Cập nhật trạng thái thành công"
         });
     } catch (error) {
-         res.json({
+        res.json({
             code: 400,
             message: "Không tồn tại"
         });
     }
-    
+
+}
+
+// [PATCH] /api/v1/tasks/change-multi 
+// chỉnh sửa nhiều sản phẩm
+module.exports.changeMulti = async (req, res) => {
+    try {
+        const { ids, key, value } = req.body;
+        switch (key) {
+            case "status":
+                await Task.updateMany(
+                    {
+                        _id: { $in: ids }
+                    },
+                    {
+                        status: value,
+                    }
+                )
+                res.json({
+                    code: 200,
+                    message: "Cập nhật trạng thái thành công"
+                })
+
+                break;
+
+            default:
+                res.json({
+                    code: 400,
+                    message: "Không tồn tại"
+                })
+                break;
+        }
+    } catch (error) {
+        res.json({
+            code: 400,
+            message: "Không tồn tại"
+        })
+    }
 }
