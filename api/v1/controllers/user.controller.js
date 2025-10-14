@@ -150,7 +150,7 @@ module.exports.otpPassword = async (req, res) => {
 // [POST]  /api/v1/users/password/resetPassword
 
 module.exports.resetPassword = async (req, res) => {
-    const token = req.body.token;
+    const token = req.cookies.token;
     const password = md5(req.body.password);
 
 
@@ -175,4 +175,35 @@ module.exports.resetPassword = async (req, res) => {
         code: 200,
         message: "Đặt lại mật khẩu thành công",
     })
+}
+
+// [GET] api/v1/users/detail
+
+module.exports.detail = async(req, res) =>{
+    try {
+        const token = req.cookies.token;
+        const user= await User.findOne({
+            token: token,
+            deleted: false
+        }).select("-password -token");
+    
+        if(!user){
+            res.status(400).json({
+                code: 400,
+                message: "Không tìm thấy người dùng"
+            });
+        }
+        res.json(
+            {
+                code: 200,
+                message: "Trang cá nhân",
+                infoUser: user
+            }
+        )
+    } catch (error) {
+        res.status(400).json({
+            code: 400,
+            message: "Đã có lỗi xảy ra"
+        })
+    }
 }
