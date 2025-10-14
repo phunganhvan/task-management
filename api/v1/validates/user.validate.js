@@ -1,7 +1,7 @@
 module.exports.registerPost=  (req, res, next) =>{
 
     if(!req.body.fullName || !req.body.email ||!req.body.password){
-        res.json(
+        res.status(400).json(
             {
                 code: 400,
                 message: "Vui lòng nhập đủ thông tin"
@@ -16,7 +16,7 @@ module.exports.registerPost=  (req, res, next) =>{
 module.exports.loginPost=  (req, res, next) =>{
 
     if(!req.body.email ||!req.body.password){
-        res.json(
+        res.status(400).json(
             {
                 code: 400,
                 message: "Vui lòng nhập đủ thông tin"
@@ -31,7 +31,7 @@ module.exports.loginPost=  (req, res, next) =>{
 module.exports.forgotPasswordPost=  (req, res, next) =>{
 
     if(!req.body.email){
-        res.json(
+        res.status(400).json(
             {
                 code: 400,
                 message: "Vui lòng email"
@@ -46,7 +46,7 @@ module.exports.forgotPasswordPost=  (req, res, next) =>{
 module.exports.resetPasswordPost=  (req, res, next) =>{
 
     if(!req.body.password){
-        res.json(
+        res.status(400).jsonres.json(
             {
                 code: 400,
                 message: "Vui lòng nhập mật khẩu"
@@ -55,7 +55,7 @@ module.exports.resetPasswordPost=  (req, res, next) =>{
         return;
     }
     if(!req.body.confirmPassword){
-        res.json(
+        res.status(400).json(
             {
                 code: 400,
                 message: "Vui lòng xác nhận mật khẩu"
@@ -64,7 +64,7 @@ module.exports.resetPasswordPost=  (req, res, next) =>{
         return;
     }
     if(req.body.password !== req.body.confirmPassword){
-        res.json(
+        res.status(400).json(
             {
                 code: 400,
                 message: "Mật khẩu không trùng khớp. Vui lòng kiểm tra lại!"

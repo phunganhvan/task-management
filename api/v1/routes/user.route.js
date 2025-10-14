@@ -7,6 +7,7 @@ router.post("/register", userValidates.registerPost ,controller.register);
 router.post("/login", userValidates.loginPost ,controller.login);
 router.post("/password/forgot", userValidates.forgotPasswordPost, controller.forgotPassword)
 
-router.post("/password/otp", controller.otpPassword)
+router.post("/password/otp", controller.otpPassword);
+router.post("/password/reset", userValidates.resetPasswordPost,controller.resetPassword);
 
 module.exports = router;
