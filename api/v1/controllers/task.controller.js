@@ -57,7 +57,7 @@ module.exports.detail = async (req, res) => {
         });
         res.json(task);
     } catch (error) {
-        res.json("Không tìm thấy");
+        res.status(400).json("Không tìm thấy");
     }
 }
 //chỉnh sửa 1 công việc
@@ -80,7 +80,7 @@ module.exports.changeStatus = async (req, res) => {
             message: "Cập nhật trạng thái thành công"
         });
     } catch (error) {
-        res.json({
+        res.status(400).json({
             code: 400,
             message: "Không tồn tại"
         });
@@ -124,14 +124,14 @@ module.exports.changeMulti = async (req, res) => {
                 )
                 break;
             default:
-                res.json({
+                res.status(400).json({
                     code: 400,
                     message: "Không tồn tại"
                 })
                 break;
         }
     } catch (error) {
-        res.json({
+        res.status(400).json({
             code: 400,
             message: "Không tồn tại"
         })
@@ -154,7 +154,7 @@ module.exports.create = async (req, res) => {
             }
         )
     } catch (error) {
-        res.json(
+        res.status(400).json(
             {
                 code: 400,
                 message: "Lỗi!!!"
@@ -179,7 +179,7 @@ module.exports.edit = async (req, res) => {
             }
         )
     } catch (error) {
-        res.json(
+        res.status(400).json(
             {
                 code: 400,
                 message: "Lỗi!!!"
@@ -206,7 +206,7 @@ module.exports.delete = async (req, res) => {
             message: "Xóa thành công"
         })
     } catch (error) {
-        res.json(
+        res.status(400).json(
             {
                 code: 400,
                 message: "Lỗi!!!"

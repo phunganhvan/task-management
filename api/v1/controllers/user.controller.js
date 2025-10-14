@@ -28,7 +28,7 @@ module.exports.register = async (req, res) => {
         })
     }
     else {
-        res.json({
+        res.status(400).json({
             code: 400,
             message: "Email đã tồn tại"
         })
@@ -57,14 +57,14 @@ module.exports.login = async (req, res) => {
             });
             return;
         } else {
-            res.json({
+            res.status(400).json({
                 code: 400,
                 message: "Sai mật khẩu",
             });
             return;
         }
     } else {
-        res.json({
+        res.status(400).json({
             code: 400,
             message: "Email không tồn tại",
         });
@@ -82,7 +82,7 @@ module.exports.forgotPassword = async (req, res) => {
         deleted: false,
     });
     if (!user) {
-        res.json({
+        res.status(400).json({
             code: 400,
             message: "Email không tồn tại"
         });
@@ -112,5 +112,37 @@ module.exports.forgotPassword = async (req, res) => {
     res.json({
         code: 200,
         message: "Đã gửi mã OTP xác nhận"
+    })
+}
+
+// [POST] /api/v1/users/password/otpPassword
+
+module.exports.otpPassword = async(req, res) =>{
+    const email = req.body.email;
+    const otp = req.body.otp;
+
+    // console.log(email, otp);
+
+    const result= await ForgotPassword.findOne({
+        email: email,
+        otp: otp
+    })
+    if(!result){
+        res.status(400).json({
+            code: 400,
+            message: "Mã OTP không hợp lệ",
+        });
+        return;
+    }
+    const user= await User.findOne({
+        email: email,
+        deleted: false
+    })
+    const token = user.token;
+    res.cookie("token", token);
+    res.json({
+        code: 200,
+        message: "Xác thực thành công",
+        token: token
     })
 }
