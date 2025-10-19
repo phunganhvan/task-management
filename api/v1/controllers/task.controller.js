@@ -143,6 +143,9 @@ module.exports.changeMulti = async (req, res) => {
 
 module.exports.create = async (req, res) => {
     try {
+        const userId= req.user.id;
+
+        req.body.createdBy= userId;
         // validate nữa
         const record = new Task(req.body);
         const data = await record.save();
