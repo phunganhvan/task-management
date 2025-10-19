@@ -16,7 +16,8 @@ module.exports.register = async (req, res) => {
         const user = new User({
             fullName: req.body.fullName,
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            token: generateHelper.generateRandomString(30),
         })
         user.save();
         const token = user.token;
@@ -181,23 +182,23 @@ module.exports.resetPassword = async (req, res) => {
 
 module.exports.detail = async(req, res) =>{
     try {
-        const token = req.cookies.token;
-        const user= await User.findOne({
-            token: token,
-            deleted: false
-        }).select("-password -token");
+        // const token = req.cookies.token;
+        // const user= await User.findOne({
+        //     token: token,
+        //     deleted: false
+        // }).select("-password -token");
     
-        if(!user){
-            res.status(400).json({
-                code: 400,
-                message: "Không tìm thấy người dùng"
-            });
-        }
+        // if(!user){
+        //     res.status(400).json({
+        //         code: 400,
+        //         message: "Không tìm thấy người dùng"
+        //     });
+        // }
         res.json(
             {
                 code: 200,
                 message: "Trang cá nhân",
-                infoUser: user
+                infoUser: req.user
             }
         )
     } catch (error) {
